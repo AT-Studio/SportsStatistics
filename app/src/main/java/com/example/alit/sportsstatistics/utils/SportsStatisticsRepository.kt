@@ -17,6 +17,9 @@ class SportsStatisticsRepository {
     companion object {
 
         const val BASE_URL = "https://api.mysportsfeeds.com/v2.1/pull/nfl/"
+        const val SEASON_CURRENT = "current"
+        const val SEASON_LATEST = "latest"
+        const val SEASON_2018_REGULAR = "2018-regular"
 
         var INSTANCE: SportsStatisticsRepository? = null
 
@@ -38,7 +41,7 @@ class SportsStatisticsRepository {
     lateinit var context: Context
     lateinit var sportsStatisticsDatabase: SportsStatisticsDatabase
 
-    fun getTeamStats(team: String): Observable<TeamStandingResponse> {
+    fun getTeamStats(season: String, team: String): Observable<TeamStandingResponse> {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -47,7 +50,7 @@ class SportsStatisticsRepository {
 
         val sportsStatsAPI = retrofit.create(SportsStatisticsService::class.java)
 
-        return sportsStatsAPI.getTeamStandings(getApiAuth(), team)
+        return sportsStatsAPI.getTeamStandings(getApiAuth(), season, team)
     }
 
     fun getApiAuth(): String {

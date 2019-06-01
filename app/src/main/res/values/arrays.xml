@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="teamsList">
+        <item>49ers,SF</item>
+        <item>bears,CHI</item>
+        <item>bengals,CIN</item>
+        <item>bills,BUF</item>
+        <item>broncos,DEN</item>
+        <item>browns,CLE</item>
+        <item>buccaneers,TB</item>
+        <item>cardinals,ARI</item>
+        <item>chargers,LAC</item>
+        <item>chiefs,KC</item>
+        <item>colts,IND</item>
+        <item>cowboys,DAL</item>
+        <item>dolphins,MIA</item>
+        <item>eagles,PHI</item>
+        <item>falcons,ATL</item>
+        <item>giants,NYG</item>
+        <item>jaguars,JAX</item>
+        <item>jets,NYJ</item>
+        <item>lions,DET</item>
+        <item>packers,GB</item>
+        <item>panthers,CAR</item>
+        <item>patriots,NE</item>
+        <item>raiders,OAK</item>
+        <item>rams,LA</item>
+        <item>ravens,BAL</item>
+        <item>redskins,WAS</item>
+        <item>saints,NO</item>
+        <item>seahawks,SEA</item>
+        <item>steelers,PIT</item>
+        <item>texans,HOU</item>
+        <item>titans,TEN</item>
+        <item>vikings,MIN</item>
+    </string-array>
+
+</resources>

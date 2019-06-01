@@ -4,6 +4,7 @@ open class MySportsTeam {
 
     val team: Team? = null
     val stats: Stats? = null
+    val overallRank: Rank? = null
 
     inner class Team {
         val id: String? = null
@@ -14,11 +15,17 @@ open class MySportsTeam {
 
     inner class Stats {
 
+        val gamesPlayed: Int? = null
         val standings: Standings? = null
 
         inner class Standings {
             val wins: Int? = null
             val losses: Int? = null
+            val ties: Int? = null
         }
+    }
+
+    inner class Rank {
+        val rank: Int? = null
     }
 }

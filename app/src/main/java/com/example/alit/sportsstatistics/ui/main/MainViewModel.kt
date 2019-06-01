@@ -14,8 +14,8 @@ class MainViewModel : AndroidViewModel {
         sportsStatisticsRepository = SportsStatisticsRepository.get(application)
     }
 
-    fun getTeamStats(team: String): Observable<TeamStandingResponse> {
-        return sportsStatisticsRepository.getTeamStats(team)
+    fun getTeamStats(season: String, team: String): Observable<TeamStandingResponse> {
+        return sportsStatisticsRepository.getTeamStats(season, team)
     }
 
 }

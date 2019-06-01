@@ -2,21 +2,151 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <View
+        android:id="@+id/v_fragment_main_add_team_height_holder"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"/>
 
-    <EditText
-        android:id="@+id/et_fragment_main_add_team"
+    <LinearLayout
+        android:id="@+id/ll_fragment_main_add_team_team_outer_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="Hint Hint"
-        android:background="@color/defaultBackgroundColor"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:gravity="center_vertical"/>
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/cl_fragment_main_add_team_team_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners_top">
+
+            <ImageView
+                android:id="@+id/iv_fragment_main_add_team_logo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!--<com.facebook.drawee.view.SimpleDraweeView-->
+                <!--android:id="@+id/iv_adapter_categories_item_logo"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_gravity="center" />-->
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tv_fragment_main_add_team_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="5dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="Patriots"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintBottom_toTopOf="@+id/tv_fragment_team_add_team_city"
+                app:layout_constraintEnd_toStartOf="@id/cv_fragment_main_add_team_follow"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/iv_fragment_main_add_team_logo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/tv_fragment_main_add_team_rank"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/tertiary_text"-->
+            <!--android:layout_marginEnd="15dp"-->
+            <!--tools:text="Rank: 1"-->
+            <!--app:layout_constraintBottom_toBottomOf="@id/tv_fragment_main_add_team_name"-->
+            <!--app:layout_constraintEnd_toEndOf="parent" />-->
+
+            <TextView
+                android:id="@+id/tv_fragment_team_add_team_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                tools:text="New England, NE"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toStartOf="@id/cv_fragment_main_add_team_follow"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/iv_fragment_main_add_team_logo"
+                app:layout_constraintTop_toBottomOf="@+id/tv_fragment_main_add_team_name" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_fragment_main_add_team_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:cardBackgroundColor="@color/accent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:textColor="@color/icons"
+                    android:textSize="16sp"
+                    android:text="Follow"/>
+
+            </android.support.v7.widget.CardView>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/dividerLowAlpha"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_fragment_main_add_team_logo" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_fragment_main_add_team_search_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:elevation="2dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/defaultBackgroundColor">
+
+        <EditText
+            android:id="@+id/et_fragment_main_add_team_search_text"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Team Name"
+            android:background="@null"
+            android:inputType="textCapSentences"
+            android:layout_centerVertical="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"/>
+
+    </RelativeLayout>
 
 </FrameLayout>
