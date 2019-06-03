@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.team_detail.TeamDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_activity_team_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:statusBarScrim="@color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/tb_activity_team_detail">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_activity_main_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/defaultBackgroundColor">
+
+                <ImageView
+                    android:id="@+id/iv_activity_team_detail_logo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_city"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_activity_team_detail_city"
+                    app:layout_constraintStart_toEndOf="@id/iv_activity_team_detail_logo"
+                    app:layout_constraintTop_toTopOf="@id/iv_activity_team_detail_logo"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="Saints" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_activity_team_detail_logo"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_rank_text"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/iv_activity_team_detail_logo"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_activity_team_detail_name"
+                    tools:text="New Orleans" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_rank_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="Rank: "
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_activity_team_detail_logo"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_rank"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activity_team_detail_city"
+                    app:layout_constraintTop_toTopOf="@id/iv_activity_team_detail_logo" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_activity_team_detail_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activity_team_detail_rank_text"
+                    app:layout_constraintTop_toTopOf="@id/iv_activity_team_detail_logo"
+                    tools:text="1" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_wins_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Wins"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_losses_text"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_activity_team_detail_logo" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_wins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    tools:text="10"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_activity_team_detail_wins_text"
+                    app:layout_constraintEnd_toEndOf="@id/tv_activity_team_detail_wins_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activity_team_detail_wins_text"/>
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_losses_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Losses"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_ties_text"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activity_team_detail_wins_text"
+                    app:layout_constraintTop_toBottomOf="@id/iv_activity_team_detail_logo" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_losses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    tools:text="5"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_activity_team_detail_losses_text"
+                    app:layout_constraintEnd_toEndOf="@id/tv_activity_team_detail_losses_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activity_team_detail_losses_text"/>
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_ties_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Ties"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activity_team_detail_losses_text"
+                    app:layout_constraintTop_toBottomOf="@id/iv_activity_team_detail_logo" />
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_ties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    tools:text="2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_activity_team_detail_ties_text"
+                    app:layout_constraintEnd_toEndOf="@id/tv_activity_team_detail_ties_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activity_team_detail_ties_text"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_activity_team_detail"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/defaultBackgroundColor"
+                app:layout_collapseMode="pin"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_back_black_24dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Saints"
+                        android:visibility="invisible"
+                        android:layout_marginStart="56dp"
+                        android:gravity="center_vertical"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text"/>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cv_adapter_teams_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:foreground="@drawable/card_ripple_dark_bg"
+                        android:stateListAnimator="@animator/card_elev_selector"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="17.5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true">
+
+                        <TextView
+                            android:id="@+id/tv_adapter_teams_follow_text"
+                            android:layout_width="80dp"
+                            android:layout_height="35dp"
+                            android:textColor="@color/accent"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:background="@drawable/joined_button_background"
+                            android:text="Follow"/>
+
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/large_text" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--app:layout_anchor="@id/app_bar"-->
+        <!--app:layout_anchorGravity="bottom|end"-->
+        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+
+</android.support.design.widget.CoordinatorLayout>

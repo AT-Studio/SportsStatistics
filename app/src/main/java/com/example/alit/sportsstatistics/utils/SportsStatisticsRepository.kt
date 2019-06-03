@@ -4,7 +4,12 @@ import android.content.Context
 import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.utils.db.SportsStatisticsDatabase
+import com.example.alit.sportsstatistics.utils.db.tables.Team
+import com.example.alit.sportsstatistics.utils.db.tables.TeamStandings
 import com.example.alit.sportsstatistics.utils.network.SportsStatisticsService
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import okhttp3.Credentials
 import retrofit2.Retrofit
@@ -59,4 +64,29 @@ class SportsStatisticsRepository {
 //        return "Basic " + auth
     }
 
+    fun insertTeamRoom(team: Team): Completable {
+        return Completable.fromCallable {
+            sportsStatisticsDatabase.teamDao().insert(team)
+        }
+    }
+
+    fun deleteTeamRoom(team: Team): Completable {
+        return Completable.fromCallable {
+            sportsStatisticsDatabase.teamDao().delete(team)
+        }
+    }
+
+    fun getAllTeamsRoom(): Flowable<List<Team>> {
+        return sportsStatisticsDatabase.teamDao().getAllTeams()
+    }
+
+    fun insertTeamStandingRoom(teamStanding: TeamStandings): Completable {
+        return Completable.fromCallable {
+            sportsStatisticsDatabase.teamStandingsDao().insert(teamStanding)
+        }
+    }
+
+    fun getTeamStandingRoom(teamAbbr: String, season: String): Maybe<TeamStandings> {
+        return sportsStatisticsDatabase.teamStandingsDao().getTeamStanding(teamAbbr, season)
+    }
 }

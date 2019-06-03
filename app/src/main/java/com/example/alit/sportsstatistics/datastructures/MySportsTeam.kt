@@ -4,10 +4,10 @@ open class MySportsTeam {
 
     val team: Team? = null
     val stats: Stats? = null
-    val overallRank: Rank? = null
+    val overallRank: OverallRank? = null
 
     inner class Team {
-        val id: String? = null
+        val id: Int? = null
         val city: String? = null
         val name: String? = null
         val abbreviation: String? = null
@@ -25,7 +25,7 @@ open class MySportsTeam {
         }
     }
 
-    inner class Rank {
+    inner class OverallRank {
         val rank: Int? = null
     }
 }

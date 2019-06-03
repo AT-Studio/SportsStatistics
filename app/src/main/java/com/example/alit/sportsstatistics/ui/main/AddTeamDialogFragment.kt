@@ -11,13 +11,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.datastructures.MySportsTeam
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.ui.base.BaseDialogFragment
 import com.example.alit.sportsstatistics.utils.SportsStatisticsRepository
+import com.example.alit.sportsstatistics.utils.db.tables.Team
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -44,6 +47,12 @@ class AddTeamDialogFragment : BaseDialogFragment() {
     var disposable: Disposable? = null;
 
     var teamContentHeight = 0
+
+    var contentShown: Boolean = false
+
+    var loadingAnim: ValueAnimator? = null
+
+    var currentTeam: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,11 +100,20 @@ class AddTeamDialogFragment : BaseDialogFragment() {
 
         rootView.et_fragment_main_add_team_search_text.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                val teamToSearch = rootView.et_fragment_main_add_team_search_text.text.toString().toLowerCase()
+                val teamToSearch = rootView.et_fragment_main_add_team_search_text.text.toString().toLowerCase().trim()
                 if (disposable != null && !disposable!!.isDisposed) disposable!!.dispose()
+                if (loadingAnim != null && loadingAnim!!.isRunning) loadingAnim!!.cancel()
                 if (teams.containsKey(teamToSearch)) {
                     val teamAbbr = teams.get(teamToSearch)
+                    currentTeam = teamToSearch
                     if (teamsCache.containsKey(teamToSearch)) {
+                        if ((activity as MainActivity).getFollowedTeam(teamToSearch) != null) {
+                            Log.d("room", "team is followed")
+                            setFollowed(true)
+                        } else {
+                            Log.d("room", "team is not followed")
+                            setFollowed(false)
+                        }
                         val team = teamsCache.get(teamToSearch)
                         rootView.tv_fragment_main_add_team_name.setText(team!!.team!!.name)
                         rootView.tv_fragment_team_add_team_city.setText(
@@ -104,13 +122,21 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                         rootView.iv_fragment_main_add_team_logo.setImageDrawable(
                                 ContextCompat.getDrawable(activity, getId(teamAbbr!!.toLowerCase(), R.drawable::class.java))
                         )
-                        showTeamContent()
+                        if (!contentShown) showTeamContent()
                     } else {
                         //TODO: Show loading animation. Let loading run for at least like ~200ms
+                        animateCicle()
                         disposable = viewModel.getTeamStats(SportsStatisticsRepository.SEASON_2018_REGULAR, teamAbbr!!)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({ teamStandingResponse: TeamStandingResponse? ->
+                                    if ((activity as MainActivity).getFollowedTeam(teamToSearch) != null) {
+                                        Log.d("room", "team is followed")
+                                        setFollowed(true)
+                                    } else {
+                                        Log.d("room", "team is not followed")
+                                        setFollowed(false)
+                                    }
                                     val team = teamStandingResponse!!.teams!![0]
                                     rootView.tv_fragment_main_add_team_name.setText(team.team!!.name)
                                     rootView.tv_fragment_team_add_team_city.setText(
@@ -120,7 +146,8 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                                             ContextCompat.getDrawable(activity, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
                                     )
                                     teamsCache.put(teamToSearch, team)
-                                    showTeamContent()
+                                    if (!contentShown) showTeamContent()
+                                    if (loadingAnim != null && loadingAnim!!.isRunning) loadingAnim!!.cancel()
                                 }, {
                                     Log.d("mysports", it.message)
                                 })
@@ -137,9 +164,9 @@ class AddTeamDialogFragment : BaseDialogFragment() {
             }
         })
 
-        rootView.cv_fragment_main_add_team_follow.post {
-            cv_fragment_main_add_team_follow.radius = cv_fragment_main_add_team_follow.height.toFloat() / 2
-        }
+//        rootView.cv_fragment_main_add_team_follow.post {
+//            cv_fragment_main_add_team_follow.radius = cv_fragment_main_add_team_follow.height.toFloat() / 2
+//        }
 
         rootView.ll_fragment_main_add_team_team_outer_wrapper.visibility = View.INVISIBLE
 
@@ -162,6 +189,41 @@ class AddTeamDialogFragment : BaseDialogFragment() {
         rootView.v_fragment_main_add_team_height_holder.setOnClickListener {
             dismissDialog(ADD_TEAM_FRAGMENT_TAG)
             hideKeyboard()
+        }
+
+        rootView.cv_fragment_main_add_team_follow.setOnClickListener {
+            if (currentTeam != null) {
+                val teamCheck = (activity as MainActivity).getFollowedTeam(currentTeam!!)
+                if (teamCheck != null) {
+                    Log.d("room", "deleting team")
+                    viewModel.deleteTeamRoom(teamCheck)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe ({
+                                setFollowed(false)
+                            }, {
+                                Log.d("room", it.message)
+                            })
+                } else {
+                    Log.d("room", "inserting team")
+                    val team = teamsCache.get(currentTeam!!)
+                    val teamRoom = Team()
+                    teamRoom.teamID = team!!.team!!.id
+                    teamRoom.name = team.team!!.name
+                    teamRoom.abbr = team.team.abbreviation
+                    teamRoom.city = team.team.city
+                    viewModel.insertTeamRoom(teamRoom)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe ({
+                                //Completed
+                                Log.d("room", "done inserting team")
+                                setFollowed(true)
+                            }, {
+                                Log.d("room", it.message)
+                            })
+                }
+            }
         }
 
 //        val handler = Handler();
@@ -196,6 +258,7 @@ class AddTeamDialogFragment : BaseDialogFragment() {
             }
 
             override fun onAnimationStart(p0: Animator?) {
+                contentShown = true
                 rootView.ll_fragment_main_add_team_team_outer_wrapper.visibility = View.VISIBLE
             }
         })
@@ -216,15 +279,47 @@ class AddTeamDialogFragment : BaseDialogFragment() {
 
             override fun onAnimationEnd(p0: Animator?) {
                 rootView.ll_fragment_main_add_team_team_outer_wrapper.visibility = View.INVISIBLE
+                setFollowed(false)
             }
 
             override fun onAnimationCancel(p0: Animator?) {
             }
 
             override fun onAnimationStart(p0: Animator?) {
+                contentShown = false
             }
         })
         anim.start()
+    }
+
+    fun animateCicle() {
+        val params = rootView.iv_fragment_main_loading_circle.layoutParams as RelativeLayout.LayoutParams
+        loadingAnim = ValueAnimator.ofInt(getPixels(20), getPixels(50)).setDuration(400)
+        loadingAnim!!.interpolator = AccelerateDecelerateInterpolator()
+        loadingAnim!!.addUpdateListener {
+            params.marginEnd = it.animatedValue as Int
+            rootView.iv_fragment_main_loading_circle.layoutParams = params
+        }
+        loadingAnim!!.addListener(object: Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                rootView.iv_fragment_main_loading_circle.visibility = View.INVISIBLE
+                params.marginEnd = getPixels(20)
+                rootView.iv_fragment_main_loading_circle.layoutParams = params
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+                rootView.iv_fragment_main_loading_circle.visibility = View.VISIBLE
+            }
+        })
+        loadingAnim!!.repeatCount = ValueAnimator.INFINITE
+        loadingAnim!!.repeatMode = ValueAnimator.REVERSE
+        loadingAnim!!.start()
     }
 
     fun getId(resourceName: String, c: Class<*>): Int {
@@ -234,6 +329,17 @@ class AddTeamDialogFragment : BaseDialogFragment() {
         } catch (e: Exception) {
             throw RuntimeException("No resource ID found for: "
                     + resourceName + " / " + c, e)
+        }
+    }
+
+    fun setFollowed(followed: Boolean) {
+        if (followed) {
+            val drawable = ContextCompat.getDrawable(activity, R.drawable.joined_button_background)
+            rootView.tv_fragment_main_add_team_follow_text.setTextColor(ContextCompat.getColor(activity, R.color.accent))
+            rootView.tv_fragment_main_add_team_follow_text.background = drawable
+        } else {
+            rootView.tv_fragment_main_add_team_follow_text.setTextColor(ContextCompat.getColor(activity, R.color.icons))
+            rootView.tv_fragment_main_add_team_follow_text.setBackgroundColor(ContextCompat.getColor(activity, R.color.accent))
         }
     }
 
