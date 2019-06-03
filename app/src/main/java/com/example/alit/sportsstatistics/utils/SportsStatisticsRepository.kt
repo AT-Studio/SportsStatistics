@@ -22,9 +22,16 @@ class SportsStatisticsRepository {
     companion object {
 
         const val BASE_URL = "https://api.mysportsfeeds.com/v2.1/pull/nfl/"
-        const val SEASON_CURRENT = "current"
-        const val SEASON_LATEST = "latest"
-        const val SEASON_2018_REGULAR = "2018-regular"
+        const val SEASON_LATEST = "Latest"
+        const val SEASON_2018_REGULAR = "2018-Regular"
+        const val SEASON_2018_PLAYOFFS = "2018-Playoffs"
+        const val SEASON_2017_REGULAR = "2017-Regular"
+        const val SEASON_2017_PLAYOFFS = "2017-Playoffs"
+        const val SEASON_2016_REGULAR = "2016-Regular"
+        const val SEASON_2016_PLAYOFFS = "2016-Playoffs"
+        const val SEASON_2015_REGULAR = "2015-Regular"
+        const val SEASON_2015_PLAYOFFS = "2015-Playoffs"
+
 
         var INSTANCE: SportsStatisticsRepository? = null
 
