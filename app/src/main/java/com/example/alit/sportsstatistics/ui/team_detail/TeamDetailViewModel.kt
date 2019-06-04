@@ -43,4 +43,8 @@ class TeamDetailViewModel : AndroidViewModel {
         return sportsStatisticsRepository.insertAllTeamGamesRoom(teamGames)
     }
 
+    fun deleteTeamRoom(teamAbbr: String): Completable {
+        return sportsStatisticsRepository.deleteTeamRoom(teamAbbr)
+    }
+
 }

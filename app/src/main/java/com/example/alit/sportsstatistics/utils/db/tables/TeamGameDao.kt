@@ -21,4 +21,7 @@ interface TeamGameDao {
     @Query("SELECT * FROM ${TeamGame.TABLENAME} WHERE (${TeamGame.TABLENAME}.${TeamGame.TEAM_ABBR} = :teamAbbr AND ${TeamGame.TABLENAME}.${TeamGame.SEASON}  = :season)")
     fun getTeamGames(teamAbbr: String, season: String): Maybe<List<TeamGame>>
 
+    @Query("DELETE FROM ${TeamGame.TABLENAME} WHERE ${TeamGame.TEAM_ABBR} = :teamAbbr")
+    fun deleteTeamGameHistory(teamAbbr: String)
+
 }

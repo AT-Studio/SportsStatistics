@@ -63,6 +63,9 @@ class TeamDetailActivity : BaseActivity() {
         iv_activity_team_detail_logo.setImageDrawable(
                 ContextCompat.getDrawable(this, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
         )
+        tv_activity_team_detail_name.setText(teamName)
+        tv_activity_team_detail_title.setText(teamName)
+        tv_activity_team_detail_city.setText(teamCity)
 
         viewModel = ViewModelProviders.of(this).get(TeamDetailViewModel::class.java)
 
@@ -71,6 +74,10 @@ class TeamDetailActivity : BaseActivity() {
         getTeamStandingsForSeason(SportsStatisticsRepository.SEASON_LATEST)
 
         var teamNameY = 0
+
+        val dashParams = cl_activity_team_detail_dashboard.layoutParams as CollapsingToolbarLayout.LayoutParams
+        dashParams.topMargin = getPixels(56) + getStatusBarHeight()
+        cl_activity_team_detail_dashboard.layoutParams = dashParams
 
         appbar_activity_team_detail.post {
             val appbarParams = appbar_activity_team_detail.layoutParams as CoordinatorLayout.LayoutParams
@@ -83,10 +90,6 @@ class TeamDetailActivity : BaseActivity() {
         //TODO: first check if season is stored locally?
 
         cl_activity_team_detail_dashboard.post {
-            val dashParams = cl_activity_team_detail_dashboard.layoutParams as CollapsingToolbarLayout.LayoutParams
-            dashParams.topMargin = getPixels(56) + getStatusBarHeight()
-            cl_activity_team_detail_dashboard.layoutParams = dashParams
-
             val rankParams = tv_activity_team_detail_rank.layoutParams as ConstraintLayout.LayoutParams
             rankParams.width = tv_activity_team_detail_rank_widther.width
             tv_activity_team_detail_rank.layoutParams = rankParams
@@ -95,15 +98,15 @@ class TeamDetailActivity : BaseActivity() {
         appbar_activity_team_detail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             Log.d("teamdetail", "offset: $verticalOffset")
             if (Math.abs(verticalOffset) == appbar_activity_team_detail.totalScrollRange) {
-                rl_activity_team_detail_tb_inner.elevation = getPixels(0).toFloat()
+                rl_activity_team_detail_tb_inner.elevation = 0f
                 v_activity_team_detail_divider.visibility = View.INVISIBLE
-                ViewCompat.setElevation(appbar_activity_team_detail, getPixels(2).toFloat())
+                ViewCompat.setElevation(appbar_activity_team_detail, resources.getDimension(R.dimen.toolbar_elevation))
             } else if (verticalOffset == 0) {
-                rl_activity_team_detail_tb_inner.elevation = getPixels(0).toFloat()
+                rl_activity_team_detail_tb_inner.elevation = 0f
                 ViewCompat.setElevation(appbar_activity_team_detail, 0f)
                 v_activity_team_detail_divider.visibility = View.VISIBLE
             } else {
-                rl_activity_team_detail_tb_inner.elevation = getPixels(2).toFloat()
+                rl_activity_team_detail_tb_inner.elevation = resources.getDimension(R.dimen.toolbar_elevation)
                 ViewCompat.setElevation(appbar_activity_team_detail, 0f)
                 v_activity_team_detail_divider.visibility = View.VISIBLE
             }
@@ -160,6 +163,18 @@ class TeamDetailActivity : BaseActivity() {
                 vp_activity_team_detail.arrowScroll(ViewPager.FOCUS_RIGHT)
             }
         }
+
+        cv_activity_team_detail_follow.setOnClickListener {
+            val disposable = viewModel.deleteTeamRoom(teamAbbr)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe ({
+                        finish()
+                    }, {
+                        Log.d("room", it.message)
+                    })
+            disposables.add(disposable)
+        }
     }
 
     fun getTeamStandingsForSeason(season: String) {
@@ -175,12 +190,10 @@ class TeamDetailActivity : BaseActivity() {
                     tv_activity_team_detail_title.setText(teamName)
                     tv_activity_team_detail_city.setText(teamCity)
                     if (teamStanding.wins!! == -1) {
-                        tv_activity_team_detail_wins.setText(STAT_UNAVAILABLE)
-                        tv_activity_team_detail_losses.setText(STAT_UNAVAILABLE)
-                        tv_activity_team_detail_ties.setText(STAT_UNAVAILABLE)
-                        tv_activity_team_detail_rank.setText(STAT_UNAVAILABLE)
+                        setTeamStandingsAvailable(false)
                     }
                     else {
+                        setTeamStandingsAvailable(true)
                         tv_activity_team_detail_wins.setText(teamStanding.wins!!.toString())
                         tv_activity_team_detail_losses.setText(teamStanding.losses!!.toString())
                         tv_activity_team_detail_ties.setText(teamStanding.ties!!.toString())
@@ -197,13 +210,7 @@ class TeamDetailActivity : BaseActivity() {
                                 Log.d("room", "onComplete teamstanding: " + season)
                                 if (teamStanding.teams.isNullOrEmpty()) {
                                     Log.d("room", "onComplete teamstanding is null")
-                                    tv_activity_team_detail_name.setText(teamName)
-                                    tv_activity_team_detail_title.setText(teamName)
-                                    tv_activity_team_detail_city.setText(teamCity)
-                                    tv_activity_team_detail_wins.setText(STAT_UNAVAILABLE)
-                                    tv_activity_team_detail_losses.setText(STAT_UNAVAILABLE)
-                                    tv_activity_team_detail_ties.setText(STAT_UNAVAILABLE)
-                                    tv_activity_team_detail_rank.setText(STAT_UNAVAILABLE)
+                                    setTeamStandingsAvailable(false)
                                     val teamStandingRoom = TeamStandings()
                                     teamStandingRoom.teamAbbr = teamAbbr
                                     teamStandingRoom.season = season
@@ -222,13 +229,11 @@ class TeamDetailActivity : BaseActivity() {
                                             })
                                     disposables.add(disposable)
                                 } else {
+                                    setTeamStandingsAvailable(true)
                                     val team = teamStanding.teams[0]
 //                                    iv_activity_team_detail_logo.setImageDrawable(
 //                                            ContextCompat.getDrawable(this, getId(team.team!!.abbreviation!!.toLowerCase(), R.drawable::class.java))
 //                                    )
-                                    tv_activity_team_detail_name.setText(teamName)
-                                    tv_activity_team_detail_title.setText(teamName)
-                                    tv_activity_team_detail_city.setText(teamCity)
                                     tv_activity_team_detail_wins.setText(team.stats!!.standings!!.wins!!.toString())
                                     tv_activity_team_detail_losses.setText(team.stats.standings!!.losses!!.toString())
                                     tv_activity_team_detail_ties.setText(team.stats.standings.ties!!.toString())
@@ -253,10 +258,92 @@ class TeamDetailActivity : BaseActivity() {
                                 }
                             }, {
                                 Log.d("mySports", it.message)
+                                showToast("Please check internet connection")
+                                setTeamStandingsAvailable(false)
                             })
                     disposables.add(disposable)
                 })
         disposables.add(disposable)
+    }
+
+    fun updateTeamStandingsForSeason(season: String) {
+        val disposable = viewModel.getTeamStats(season, teamAbbr)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe ({ teamStanding ->
+                    Log.d("room", "onComplete teamstanding: " + season)
+                    if (teamStanding.teams.isNullOrEmpty()) {
+                        Log.d("room", "onComplete teamstanding is null")
+                        setTeamStandingsAvailable(false)
+                        val teamStandingRoom = TeamStandings()
+                        teamStandingRoom.teamAbbr = teamAbbr
+                        teamStandingRoom.season = season
+                        teamStandingRoom.gamesPlayed = -1
+                        teamStandingRoom.wins = -1
+                        teamStandingRoom.losses = -1
+                        teamStandingRoom.ties = -1
+                        teamStandingRoom.rank = -1
+                        val disposable = viewModel.insertTeamStandingRoom(teamStandingRoom)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe ({
+                                    Log.d("room", "completed saving team standing")
+                                }, {
+                                    Log.d("room", it.message)
+                                })
+                        disposables.add(disposable)
+                    } else {
+                        setTeamStandingsAvailable(true)
+                        val team = teamStanding.teams[0]
+//                                    iv_activity_team_detail_logo.setImageDrawable(
+//                                            ContextCompat.getDrawable(this, getId(team.team!!.abbreviation!!.toLowerCase(), R.drawable::class.java))
+//                                    )
+                        tv_activity_team_detail_wins.setText(team.stats!!.standings!!.wins!!.toString())
+                        tv_activity_team_detail_losses.setText(team.stats.standings!!.losses!!.toString())
+                        tv_activity_team_detail_ties.setText(team.stats.standings.ties!!.toString())
+                        tv_activity_team_detail_rank.setText(team.overallRank!!.rank!!.toString())
+                        val teamStandingRoom = TeamStandings()
+                        teamStandingRoom.teamAbbr = teamAbbr
+                        teamStandingRoom.season = season
+                        teamStandingRoom.gamesPlayed = team.stats.gamesPlayed
+                        teamStandingRoom.wins = team.stats.standings.wins
+                        teamStandingRoom.losses = team.stats.standings.losses
+                        teamStandingRoom.ties = team.stats.standings.ties
+                        teamStandingRoom.rank = team.overallRank.rank
+                        val disposable = viewModel.insertTeamStandingRoom(teamStandingRoom)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe ({
+                                    Log.d("room", "completed saving team standing")
+                                }, {
+                                    Log.d("room", it.message)
+                                })
+                        disposables.add(disposable)
+                    }
+                }, {
+                    Log.d("mySports", it.message)
+                    showToast("Please check internet connection")
+                    setTeamStandingsAvailable(false)
+                })
+        disposables.add(disposable)
+    }
+
+    fun setTeamStandingsAvailable(available: Boolean) {
+        if (available) {
+            tv_activity_team_detail_wins.setTextColor(ContextCompat.getColor(this, R.color.primary_text))
+            tv_activity_team_detail_losses.setTextColor(ContextCompat.getColor(this, R.color.primary_text))
+            tv_activity_team_detail_ties.setTextColor(ContextCompat.getColor(this, R.color.primary_text))
+            tv_activity_team_detail_rank.setTextColor(ContextCompat.getColor(this, R.color.primary_text))
+        } else {
+            tv_activity_team_detail_wins.setText(STAT_UNAVAILABLE)
+            tv_activity_team_detail_losses.setText(STAT_UNAVAILABLE)
+            tv_activity_team_detail_ties.setText(STAT_UNAVAILABLE)
+            tv_activity_team_detail_rank.setText(STAT_UNAVAILABLE)
+            tv_activity_team_detail_wins.setTextColor(ContextCompat.getColor(this, R.color.tertiary_text))
+            tv_activity_team_detail_losses.setTextColor(ContextCompat.getColor(this, R.color.tertiary_text))
+            tv_activity_team_detail_ties.setTextColor(ContextCompat.getColor(this, R.color.tertiary_text))
+            tv_activity_team_detail_rank.setTextColor(ContextCompat.getColor(this, R.color.tertiary_text))
+        }
     }
 
     fun getId(resourceName: String, c: Class<*>): Int {

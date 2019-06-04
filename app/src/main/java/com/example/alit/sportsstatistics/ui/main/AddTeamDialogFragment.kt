@@ -150,6 +150,8 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                                     if (loadingAnim != null && loadingAnim!!.isRunning) loadingAnim!!.cancel()
                                 }, {
                                     Log.d("mysports", it.message)
+                                    if (loadingAnim != null && loadingAnim!!.isRunning) loadingAnim!!.cancel()
+                                    showToast("Please check internet connection")
                                 })
                     }
                 } else {

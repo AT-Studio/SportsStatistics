@@ -2,6 +2,7 @@ package com.example.alit.sportsstatistics.ui.team_detail
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -65,6 +66,16 @@ class TeamGameHistoryFragment : BaseFragment() {
 
         viewModel = ViewModelProviders.of(this).get(TeamDetailViewModel::class.java)
 
+        getTeamGames()
+
+        srf_fragment_team_detail_game_history.setColorSchemeColors(ContextCompat.getColor(activity, R.color.accent))
+        srf_fragment_team_detail_game_history.setOnRefreshListener {
+            (activity as TeamDetailActivity).updateTeamStandingsForSeason(season)
+            updateTeamGames()
+        }
+    }
+
+    fun getTeamGames() {
         disposable = viewModel.getTeamGamesRoom(teamAbbr, season)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,6 +129,9 @@ class TeamGameHistoryFragment : BaseFragment() {
                                     }
                                 }, {
                                     Log.d("mySports", it.message)
+                                    showToast("Please check internet connection")
+                                    rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
+                                    tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                                 })
                     } else {
                         tv_fragment_team_detail_game_history_no_games.visibility = View.INVISIBLE
@@ -128,6 +142,62 @@ class TeamGameHistoryFragment : BaseFragment() {
                     Log.d("room", it.message)
                 }, {
                     Log.d("room", "on Complete, getting games from INERNET")
+                })
+    }
+
+    fun updateTeamGames() {
+        disposable = viewModel.getTeamGames(season, teamAbbr)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe ({ teamGamesResponse ->
+                    srf_fragment_team_detail_game_history.isRefreshing = false;
+                    if (teamGamesResponse.games.isNullOrEmpty()) {
+                        Log.d("room", "there were no games")
+                        rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
+                        tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
+                    } else {
+                        Log.d("room", "there were games: ${teamGamesResponse.games!!.size}")
+                        tv_fragment_team_detail_game_history_no_games.visibility = View.INVISIBLE
+                        rv_fragment_team_detail_game_history.visibility = View.VISIBLE
+                        val teamGamesRoom = ArrayList<TeamGame>()
+                        for (game in teamGamesResponse.games!!) {
+                            val teamGameRoom = TeamGame()
+                            teamGameRoom.id = game.schedule!!.id
+                            Log.d("room", teamGameRoom.id.toString())
+                            teamGameRoom.startTime = getDateFromStartTime(game.schedule!!.startTime!!)
+                            Log.d("room", teamGameRoom.startTime)
+                            teamGameRoom.awayTeamAbbr = game.schedule!!.awayTeam!!.abbreviation
+                            Log.d("room", teamGameRoom.awayTeamAbbr)
+                            teamGameRoom.homeTeamAbbr = game.schedule!!.homeTeam!!.abbreviation
+                            Log.d("room", teamGameRoom.homeTeamAbbr)
+                            teamGameRoom.awayScore = game.score!!.awayScoreTotal
+                            Log.d("room", teamGameRoom.awayScore.toString())
+                            teamGameRoom.homeScore = game.score!!.homeScoreTotal
+                            Log.d("room", teamGameRoom.homeScore.toString())
+                            teamGameRoom.teamAbbr = teamAbbr
+                            teamGameRoom.season = season
+                            teamGamesRoom.add(teamGameRoom)
+                        }
+                        Log.d("room", "setting adapter")
+                        rootView.rv_fragment_team_detail_game_history.adapter =
+                                TeamGamesRecyclerViewAdapter(teamGamesRoom)
+                        Log.d("room", "count ${rootView.rv_fragment_team_detail_game_history.adapter.itemCount}")
+                        Log.d("room", "storing in room")
+                        disposable = viewModel.insertAllTeamGamesRoom(teamGamesRoom)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe ({
+                                    Log.d("room", "finished inserting game")
+                                }, {
+                                    Log.d("room", it.message)
+                                })
+                    }
+                }, {
+                    srf_fragment_team_detail_game_history.isRefreshing = false;
+                    Log.d("mySports", it.message)
+                    showToast("Please check internet connection")
+                    rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
+                    tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                 })
     }
 

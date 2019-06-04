@@ -94,6 +94,16 @@ class SportsStatisticsRepository {
     fun deleteTeamRoom(team: Team): Completable {
         return Completable.fromCallable {
             sportsStatisticsDatabase.teamDao().delete(team)
+            sportsStatisticsDatabase.teamGamesDao().deleteTeamGameHistory(team.abbr!!)
+            sportsStatisticsDatabase.teamStandingsDao().deleteTeamStanding(team.abbr!!)
+        }
+    }
+
+    fun deleteTeamRoom(teamAbbr: String): Completable {
+        return Completable.fromCallable {
+            sportsStatisticsDatabase.teamDao().deleteTeam(teamAbbr)
+            sportsStatisticsDatabase.teamGamesDao().deleteTeamGameHistory(teamAbbr)
+            sportsStatisticsDatabase.teamStandingsDao().deleteTeamStanding(teamAbbr)
         }
     }
 

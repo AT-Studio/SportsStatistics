@@ -19,4 +19,7 @@ interface TeamStandingsDao {
             "${TeamStandings.TABLENAME}.${TeamStandings.SEASON} = :season)")
     fun getTeamStanding(teamAbbr: String, season: String): Maybe<TeamStandings>
 
+    @Query("DELETE FROM ${TeamStandings.TABLENAME} WHERE ${TeamStandings.TEAM_ABBREVIATION} = :teamAbbr")
+    fun deleteTeamStanding(teamAbbr: String)
+
 }

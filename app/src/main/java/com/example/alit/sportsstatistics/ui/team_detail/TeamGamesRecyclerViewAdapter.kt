@@ -51,6 +51,9 @@ class TeamGamesRecyclerViewAdapter(val teamGames: ArrayList<TeamGame>) : Recycle
         holder.homeScore.setText(game.homeScore.toString())
         holder.awayScore.setText(game.awayScore.toString())
 
+        holder.homeAbbr.setText(game.homeTeamAbbr)
+        holder.awayAbbr.setText(game.awayTeamAbbr)
+
         holder.gameDate.setText(game.startTime)
     }
 
@@ -70,9 +73,11 @@ class TeamGamesRecyclerViewAdapter(val teamGames: ArrayList<TeamGame>) : Recycle
 
     inner class TeamGamesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val homeLogo = itemView.iv_adapter_team_games_home_logo
+        val homeAbbr = itemView.tv_adapter_team_games_home_abbr
         val homeScore = itemView.tv_adapter_team_games_home_score_total
 
         val awayLogo = itemView.iv_adapter_team_games_away_logo
+        val awayAbbr = itemView.tv_adapter_team_games_away_abbr
         val awayScore = itemView.tv_adapter_team_games_away_score_total
 
         val gameDate = itemView.tv_adapter_team_games_date

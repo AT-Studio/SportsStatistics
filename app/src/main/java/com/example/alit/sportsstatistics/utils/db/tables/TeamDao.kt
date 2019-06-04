@@ -22,4 +22,7 @@ interface TeamDao {
     @Query("SELECT * FROM ${Team.TABLENAME}")
     fun getAllTeams(): Flowable<List<Team>>
 
+    @Query("DELETE FROM ${Team.TABLENAME} WHERE ${Team.ABBREVIATION} = :teamAbbr")
+    fun deleteTeam(teamAbbr: String)
+
 }
