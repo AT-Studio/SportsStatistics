@@ -60,8 +60,6 @@ class TeamGameHistoryFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Log.d("gamehistory", "created frag")
-
         rootView.rv_fragment_team_detail_game_history.layoutManager = LinearLayoutManager(activity)
 
         viewModel = ViewModelProviders.of(this).get(TeamDetailViewModel::class.java)
@@ -80,49 +78,36 @@ class TeamGameHistoryFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({ teamGames ->
-                    Log.d("room", "on Success, games in room: ${teamGames.size}")
                     if (teamGames.isEmpty()) {
                         disposable = viewModel.getTeamGames(season, teamAbbr)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({ teamGamesResponse ->
                                     if (teamGamesResponse.games.isNullOrEmpty()) {
-                                        Log.d("room", "there were no games")
                                         rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
                                         tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                                     } else {
-                                        Log.d("room", "there were games: ${teamGamesResponse.games!!.size}")
                                         tv_fragment_team_detail_game_history_no_games.visibility = View.INVISIBLE
                                         rv_fragment_team_detail_game_history.visibility = View.VISIBLE
                                         val teamGamesRoom = ArrayList<TeamGame>()
                                         for (game in teamGamesResponse.games!!) {
                                             val teamGameRoom = TeamGame()
                                             teamGameRoom.id = game.schedule!!.id
-                                            Log.d("room", teamGameRoom.id.toString())
                                             teamGameRoom.startTime = getDateFromStartTime(game.schedule!!.startTime!!)
-                                            Log.d("room", teamGameRoom.startTime)
                                             teamGameRoom.awayTeamAbbr = game.schedule!!.awayTeam!!.abbreviation
-                                            Log.d("room", teamGameRoom.awayTeamAbbr)
                                             teamGameRoom.homeTeamAbbr = game.schedule!!.homeTeam!!.abbreviation
-                                            Log.d("room", teamGameRoom.homeTeamAbbr)
                                             teamGameRoom.awayScore = game.score!!.awayScoreTotal
-                                            Log.d("room", teamGameRoom.awayScore.toString())
                                             teamGameRoom.homeScore = game.score!!.homeScoreTotal
-                                            Log.d("room", teamGameRoom.homeScore.toString())
                                             teamGameRoom.teamAbbr = teamAbbr
                                             teamGameRoom.season = season
                                             teamGamesRoom.add(teamGameRoom)
                                         }
-                                        Log.d("room", "setting adapter")
                                         rootView.rv_fragment_team_detail_game_history.adapter =
                                                 TeamGamesRecyclerViewAdapter(teamGamesRoom)
-                                        Log.d("room", "count ${rootView.rv_fragment_team_detail_game_history.adapter.itemCount}")
-                                        Log.d("room", "storing in room")
                                         disposable = viewModel.insertAllTeamGamesRoom(teamGamesRoom)
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe ({
-                                                    Log.d("room", "finished inserting game")
                                                 }, {
                                                     Log.d("room", it.message)
                                                 })
@@ -140,8 +125,6 @@ class TeamGameHistoryFragment : BaseFragment() {
                     }
                 }, {
                     Log.d("room", it.message)
-                }, {
-                    Log.d("room", "on Complete, getting games from INERNET")
                 })
     }
 
@@ -152,42 +135,30 @@ class TeamGameHistoryFragment : BaseFragment() {
                 .subscribe ({ teamGamesResponse ->
                     srf_fragment_team_detail_game_history.isRefreshing = false;
                     if (teamGamesResponse.games.isNullOrEmpty()) {
-                        Log.d("room", "there were no games")
                         rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
                         tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                     } else {
-                        Log.d("room", "there were games: ${teamGamesResponse.games!!.size}")
                         tv_fragment_team_detail_game_history_no_games.visibility = View.INVISIBLE
                         rv_fragment_team_detail_game_history.visibility = View.VISIBLE
                         val teamGamesRoom = ArrayList<TeamGame>()
                         for (game in teamGamesResponse.games!!) {
                             val teamGameRoom = TeamGame()
                             teamGameRoom.id = game.schedule!!.id
-                            Log.d("room", teamGameRoom.id.toString())
                             teamGameRoom.startTime = getDateFromStartTime(game.schedule!!.startTime!!)
-                            Log.d("room", teamGameRoom.startTime)
                             teamGameRoom.awayTeamAbbr = game.schedule!!.awayTeam!!.abbreviation
-                            Log.d("room", teamGameRoom.awayTeamAbbr)
                             teamGameRoom.homeTeamAbbr = game.schedule!!.homeTeam!!.abbreviation
-                            Log.d("room", teamGameRoom.homeTeamAbbr)
                             teamGameRoom.awayScore = game.score!!.awayScoreTotal
-                            Log.d("room", teamGameRoom.awayScore.toString())
                             teamGameRoom.homeScore = game.score!!.homeScoreTotal
-                            Log.d("room", teamGameRoom.homeScore.toString())
                             teamGameRoom.teamAbbr = teamAbbr
                             teamGameRoom.season = season
                             teamGamesRoom.add(teamGameRoom)
                         }
-                        Log.d("room", "setting adapter")
                         rootView.rv_fragment_team_detail_game_history.adapter =
                                 TeamGamesRecyclerViewAdapter(teamGamesRoom)
-                        Log.d("room", "count ${rootView.rv_fragment_team_detail_game_history.adapter.itemCount}")
-                        Log.d("room", "storing in room")
                         disposable = viewModel.insertAllTeamGamesRoom(teamGamesRoom)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({
-                                    Log.d("room", "finished inserting game")
                                 }, {
                                     Log.d("room", it.message)
                                 })

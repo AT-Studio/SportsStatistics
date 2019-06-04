@@ -20,6 +20,7 @@ import com.example.alit.sportsstatistics.datastructures.MySportsTeam
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.ui.base.BaseDialogFragment
 import com.example.alit.sportsstatistics.utils.SportsStatisticsRepository
+import com.example.alit.sportsstatistics.utils.UIUtils
 import com.example.alit.sportsstatistics.utils.db.tables.Team
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -108,20 +109,20 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                     currentTeam = teamToSearch
                     if (teamsCache.containsKey(teamToSearch)) {
                         if ((activity as MainActivity).getFollowedTeam(teamToSearch) != null) {
-                            Log.d("room", "team is followed")
                             setFollowed(true)
                         } else {
-                            Log.d("room", "team is not followed")
                             setFollowed(false)
                         }
                         val team = teamsCache.get(teamToSearch)
                         rootView.tv_fragment_main_add_team_name.setText(team!!.team!!.name)
-                        rootView.tv_fragment_team_add_team_city.setText(
-                                team!!.team!!.city + ", " + team.team!!.abbreviation
-                        )
-                        rootView.iv_fragment_main_add_team_logo.setImageDrawable(
-                                ContextCompat.getDrawable(activity, getId(teamAbbr!!.toLowerCase(), R.drawable::class.java))
-                        )
+                        rootView.tv_fragment_team_add_team_city.setText(team.team!!.city)
+                        try {
+                            rootView.iv_fragment_main_add_team_logo.setImageDrawable(
+                                    ContextCompat.getDrawable(activity, UIUtils.getId(teamAbbr!!.toLowerCase(), R.drawable::class.java))
+                            )
+                        } catch (e: Exception) {
+                            Log.d("uiutils", "Couldn't find resource")
+                        }
                         if (!contentShown) showTeamContent()
                     } else {
                         //TODO: Show loading animation. Let loading run for at least like ~200ms
@@ -131,20 +132,20 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({ teamStandingResponse: TeamStandingResponse? ->
                                     if ((activity as MainActivity).getFollowedTeam(teamToSearch) != null) {
-                                        Log.d("room", "team is followed")
                                         setFollowed(true)
                                     } else {
-                                        Log.d("room", "team is not followed")
                                         setFollowed(false)
                                     }
                                     val team = teamStandingResponse!!.teams!![0]
                                     rootView.tv_fragment_main_add_team_name.setText(team.team!!.name)
-                                    rootView.tv_fragment_team_add_team_city.setText(
-                                            team.team!!.city + ", " + team.team!!.abbreviation
-                                    )
-                                    rootView.iv_fragment_main_add_team_logo.setImageDrawable(
-                                            ContextCompat.getDrawable(activity, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
-                                    )
+                                    rootView.tv_fragment_team_add_team_city.setText(team.team.city)
+                                    try {
+                                        rootView.iv_fragment_main_add_team_logo.setImageDrawable(
+                                                ContextCompat.getDrawable(activity, UIUtils.getId(teamAbbr!!.toLowerCase(), R.drawable::class.java))
+                                        )
+                                    } catch (e: Exception) {
+                                        Log.d("uiutils", "Couldn't find resource")
+                                    }
                                     teamsCache.put(teamToSearch, team)
                                     if (!contentShown) showTeamContent()
                                     if (loadingAnim != null && loadingAnim!!.isRunning) loadingAnim!!.cancel()
@@ -165,10 +166,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
         })
-
-//        rootView.cv_fragment_main_add_team_follow.post {
-//            cv_fragment_main_add_team_follow.radius = cv_fragment_main_add_team_follow.height.toFloat() / 2
-//        }
 
         rootView.ll_fragment_main_add_team_team_outer_wrapper.visibility = View.INVISIBLE
 
@@ -197,7 +194,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
             if (currentTeam != null) {
                 val teamCheck = (activity as MainActivity).getFollowedTeam(currentTeam!!)
                 if (teamCheck != null) {
-                    Log.d("room", "deleting team")
                     viewModel.deleteTeamRoom(teamCheck)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -207,7 +203,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                                 Log.d("room", it.message)
                             })
                 } else {
-                    Log.d("room", "inserting team")
                     val team = teamsCache.get(currentTeam!!)
                     val teamRoom = Team()
                     teamRoom.teamID = team!!.team!!.id
@@ -218,8 +213,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe ({
-                                //Completed
-                                Log.d("room", "done inserting team")
                                 setFollowed(true)
                             }, {
                                 Log.d("room", it.message)
@@ -227,17 +220,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
                 }
             }
         }
-
-//        val handler = Handler();
-//        handler.postDelayed({
-//            val params = rootView.et_fragment_main_add_team.layoutParams as FrameLayout.LayoutParams
-//            val heightAnim = ValueAnimator.ofInt(params.height, getPixels(100)).setDuration(200)
-//            heightAnim.addUpdateListener {
-//                params.height = it.animatedValue as Int
-//                rootView.et_fragment_main_add_team.layoutParams = params
-//            }
-//            heightAnim.start()
-//        }, 1000)
     }
 
     fun showTeamContent() {
@@ -247,7 +229,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
         anim.addUpdateListener {
             outerWrapperParams.height = it.animatedValue as Int
             rootView.ll_fragment_main_add_team_team_outer_wrapper.layoutParams = outerWrapperParams
-            Log.d("addteam", "animheight: ${outerWrapperParams.height}")
         }
         anim.addListener(object: Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {
@@ -322,16 +303,6 @@ class AddTeamDialogFragment : BaseDialogFragment() {
         loadingAnim!!.repeatCount = ValueAnimator.INFINITE
         loadingAnim!!.repeatMode = ValueAnimator.REVERSE
         loadingAnim!!.start()
-    }
-
-    fun getId(resourceName: String, c: Class<*>): Int {
-        try {
-            val idField = c.getDeclaredField(resourceName)
-            return idField.getInt(idField)
-        } catch (e: Exception) {
-            throw RuntimeException("No resource ID found for: "
-                    + resourceName + " / " + c, e)
-        }
     }
 
     fun setFollowed(followed: Boolean) {

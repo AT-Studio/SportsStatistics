@@ -36,12 +36,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!--<com.facebook.drawee.view.SimpleDraweeView-->
-                <!--android:id="@+id/iv_adapter_categories_item_logo"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_gravity="center" />-->
-
             </ImageView>
 
             <TextView
@@ -63,16 +57,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/iv_fragment_main_add_team_logo"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/tv_fragment_main_add_team_rank"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@color/tertiary_text"-->
-            <!--android:layout_marginEnd="15dp"-->
-            <!--tools:text="Rank: 1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@id/tv_fragment_main_add_team_name"-->
-            <!--app:layout_constraintEnd_toEndOf="parent" />-->
 
             <TextView
                 android:id="@+id/tv_fragment_team_add_team_city"
@@ -108,7 +92,7 @@
                     android:gravity="center"
                     android:textSize="16sp"
                     android:background="@color/accent"
-                    android:text="Follow"/>
+                    android:text="@string/fragment_main_add_team_follow_text"/>
 
             </android.support.v7.widget.CardView>
 
@@ -141,7 +125,7 @@
             android:id="@+id/et_fragment_main_add_team_search_text"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:hint="Team Name"
+            android:hint="@string/fragment_main_add_team_search_text"
             android:background="@null"
             android:inputType="textCapSentences"
             android:layout_centerVertical="true"

@@ -25,6 +25,6 @@
         android:visibility="invisible"
         android:gravity="center"
         android:textColor="@color/tertiary_text"
-        android:text="No games available"/>
+        android:text="@string/fragment_team_detail_game_history_no_games"/>
 
 </FrameLayout>

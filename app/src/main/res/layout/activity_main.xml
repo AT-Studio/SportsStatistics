@@ -29,7 +29,7 @@
                     android:fontFamily="@font/coiny"
                     android:gravity="center"
                     android:letterSpacing="0.1"
-                    android:text="NFL Sports Statistics"
+                    android:text="@string/app_name_main"
                     android:textColor="@color/primary_text"
                     android:textSize="18sp" />
 
@@ -59,7 +59,7 @@
             android:visibility="invisible"
             android:gravity="center"
             android:textColor="@color/tertiary_text"
-            android:text="You are not following any teams, yet."/>
+            android:text="@string/activity_main_not_following_teams_text"/>
 
     </FrameLayout>
 

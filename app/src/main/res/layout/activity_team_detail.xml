@@ -96,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
-                    android:text="Rank: "
+                    android:text="@string/activity_team_detail_rank_text"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_activity_team_detail_logo"
                     app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_rank"
@@ -123,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Wins"
+                    android:text="@string/activity_team_detail_wins_text"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_losses_text"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -148,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Losses"
+                    android:text="@string/activity_team_detail_losses_text"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/tv_activity_team_detail_ties_text"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -173,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Ties"
+                    android:text="@string/activity_team_detail_ties_text"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -208,7 +208,7 @@
                     android:id="@+id/tv_activity_team_detail_season_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Season"
+                    android:text="@string/activity_team_detail_season_text"
                     app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintBottom_toTopOf="@+id/tv_activity_team_detail_season"
                     app:layout_constraintEnd_toStartOf="@id/iv_activity_team_detail_arrow_right"
@@ -294,14 +294,14 @@
                     android:layout_alignParentEnd="true">
 
                     <TextView
-                        android:id="@+id/tv_adapter_teams_follow_text"
+                        android:id="@+id/tv_activity_team_detail_follow_text"
                         android:layout_width="80dp"
                         android:layout_height="35dp"
                         android:textColor="@color/accent"
                         android:gravity="center"
                         android:textSize="16sp"
                         android:background="@drawable/joined_button_background"
-                        android:text="Follow"/>
+                        android:text="@string/activity_team_detail_follow_text"/>
 
                 </android.support.v7.widget.CardView>
 
@@ -317,30 +317,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-
     </android.support.v4.view.ViewPager>
-
-    <!--<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/text_margin"-->
-            <!--android:text="@string/large_text" />-->
-
-    <!--</android.support.v4.widget.NestedScrollView>-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="bottom|end"-->
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>

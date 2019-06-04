@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground">
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/iv_adapter_teams_logo"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -16,7 +16,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </ImageView>
+    </com.facebook.drawee.view.SimpleDraweeView>
 
     <TextView
         android:id="@+id/tv_adapter_teams_name"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:textSize="16sp"
             android:background="@drawable/joined_button_background"
-            android:text="Follow"/>
+            android:text="@string/adapter_teams_follow_text"/>
 
     </android.support.v7.widget.CardView>
 

@@ -17,6 +17,7 @@ import android.view.View
 import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.ui.base.BaseActivity
 import com.example.alit.sportsstatistics.utils.SportsStatisticsRepository
+import com.example.alit.sportsstatistics.utils.UIUtils.Companion.getId
 import com.example.alit.sportsstatistics.utils.db.tables.TeamStandings
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -37,7 +38,6 @@ class TeamDetailActivity : BaseActivity() {
 
     lateinit var viewModel: TeamDetailViewModel
 
-//    var disposable: Disposable? = null
     lateinit var disposables: ArrayList<Disposable>
 
     lateinit var teamName: String
@@ -47,11 +47,6 @@ class TeamDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_detail)
-//        setSupportActionBar(tb_activity_team_detail)
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
 
         val bundle = intent.extras
         if (bundle == null || bundle.isEmpty) finish()
@@ -60,9 +55,13 @@ class TeamDetailActivity : BaseActivity() {
         teamCity = bundle.getString(TEAM_CITY_EXTRA)
         teamAbbr = bundle.getString(TEAM_ABBREVIATION_EXTRA)
 
-        iv_activity_team_detail_logo.setImageDrawable(
-                ContextCompat.getDrawable(this, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
-        )
+        try {
+            iv_activity_team_detail_logo.setImageDrawable(
+                    ContextCompat.getDrawable(this, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
+            )
+        } catch (e: Exception) {
+            Log.d("uiutils", "Couldn't find resource")
+        }
         tv_activity_team_detail_name.setText(teamName)
         tv_activity_team_detail_title.setText(teamName)
         tv_activity_team_detail_city.setText(teamCity)
@@ -87,8 +86,6 @@ class TeamDetailActivity : BaseActivity() {
             teamNameY = tv_activity_team_detail_name.y.toInt() + tv_activity_team_detail_name.height
         }
 
-        //TODO: first check if season is stored locally?
-
         cl_activity_team_detail_dashboard.post {
             val rankParams = tv_activity_team_detail_rank.layoutParams as ConstraintLayout.LayoutParams
             rankParams.width = tv_activity_team_detail_rank_widther.width
@@ -96,7 +93,6 @@ class TeamDetailActivity : BaseActivity() {
         }
 
         appbar_activity_team_detail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            Log.d("teamdetail", "offset: $verticalOffset")
             if (Math.abs(verticalOffset) == appbar_activity_team_detail.totalScrollRange) {
                 rl_activity_team_detail_tb_inner.elevation = 0f
                 v_activity_team_detail_divider.visibility = View.INVISIBLE
@@ -129,7 +125,6 @@ class TeamDetailActivity : BaseActivity() {
                 }
 
                 override fun onPageSelected(position: Int) {
-                    Log.d("pager", "page selected: $position")
                     tv_activity_team_detail_season.setText((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).getPageTitle(position))
                     getTeamStandingsForSeason((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).seasons[position])
                     if (position == 0) {
@@ -145,9 +140,6 @@ class TeamDetailActivity : BaseActivity() {
                 }
             })
         }, 200)
-
-//        tb_activity_team_detail.setOnTouchListener(null)
-//        tb_activity_team_detail.setOnClickListener(null)
 
         iv_activity_team_detail_back.setOnClickListener {
             finish()
@@ -182,10 +174,6 @@ class TeamDetailActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({ teamStanding ->
-                    Log.d("room", "onSuccess")
-//                    iv_activity_team_detail_logo.setImageDrawable(
-//                            ContextCompat.getDrawable(this, getId(teamAbbr.toLowerCase(), R.drawable::class.java))
-//                    )
                     tv_activity_team_detail_name.setText(teamName)
                     tv_activity_team_detail_title.setText(teamName)
                     tv_activity_team_detail_city.setText(teamCity)
@@ -202,14 +190,11 @@ class TeamDetailActivity : BaseActivity() {
                 }, {
                     Log.d("room", it.message)
                 }, {
-                    Log.d("room", "onComplete")
                     val disposable = viewModel.getTeamStats(season, teamAbbr)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe ({ teamStanding ->
-                                Log.d("room", "onComplete teamstanding: " + season)
                                 if (teamStanding.teams.isNullOrEmpty()) {
-                                    Log.d("room", "onComplete teamstanding is null")
                                     setTeamStandingsAvailable(false)
                                     val teamStandingRoom = TeamStandings()
                                     teamStandingRoom.teamAbbr = teamAbbr
@@ -223,7 +208,6 @@ class TeamDetailActivity : BaseActivity() {
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribe ({
-                                                Log.d("room", "completed saving team standing")
                                             }, {
                                                 Log.d("room", it.message)
                                             })
@@ -231,9 +215,6 @@ class TeamDetailActivity : BaseActivity() {
                                 } else {
                                     setTeamStandingsAvailable(true)
                                     val team = teamStanding.teams[0]
-//                                    iv_activity_team_detail_logo.setImageDrawable(
-//                                            ContextCompat.getDrawable(this, getId(team.team!!.abbreviation!!.toLowerCase(), R.drawable::class.java))
-//                                    )
                                     tv_activity_team_detail_wins.setText(team.stats!!.standings!!.wins!!.toString())
                                     tv_activity_team_detail_losses.setText(team.stats.standings!!.losses!!.toString())
                                     tv_activity_team_detail_ties.setText(team.stats.standings.ties!!.toString())
@@ -250,7 +231,6 @@ class TeamDetailActivity : BaseActivity() {
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribe ({
-                                                Log.d("room", "completed saving team standing")
                                             }, {
                                                 Log.d("room", it.message)
                                             })
@@ -271,9 +251,7 @@ class TeamDetailActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({ teamStanding ->
-                    Log.d("room", "onComplete teamstanding: " + season)
                     if (teamStanding.teams.isNullOrEmpty()) {
-                        Log.d("room", "onComplete teamstanding is null")
                         setTeamStandingsAvailable(false)
                         val teamStandingRoom = TeamStandings()
                         teamStandingRoom.teamAbbr = teamAbbr
@@ -287,7 +265,6 @@ class TeamDetailActivity : BaseActivity() {
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({
-                                    Log.d("room", "completed saving team standing")
                                 }, {
                                     Log.d("room", it.message)
                                 })
@@ -295,9 +272,6 @@ class TeamDetailActivity : BaseActivity() {
                     } else {
                         setTeamStandingsAvailable(true)
                         val team = teamStanding.teams[0]
-//                                    iv_activity_team_detail_logo.setImageDrawable(
-//                                            ContextCompat.getDrawable(this, getId(team.team!!.abbreviation!!.toLowerCase(), R.drawable::class.java))
-//                                    )
                         tv_activity_team_detail_wins.setText(team.stats!!.standings!!.wins!!.toString())
                         tv_activity_team_detail_losses.setText(team.stats.standings!!.losses!!.toString())
                         tv_activity_team_detail_ties.setText(team.stats.standings.ties!!.toString())
@@ -314,7 +288,6 @@ class TeamDetailActivity : BaseActivity() {
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({
-                                    Log.d("room", "completed saving team standing")
                                 }, {
                                     Log.d("room", it.message)
                                 })
@@ -346,22 +319,11 @@ class TeamDetailActivity : BaseActivity() {
         }
     }
 
-    fun getId(resourceName: String, c: Class<*>): Int {
-        try {
-            val idField = c.getDeclaredField(resourceName)
-            return idField.getInt(idField)
-        } catch (e: Exception) {
-            throw RuntimeException("No resource ID found for: "
-                    + resourceName + " / " + c, e)
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         for (disposable in disposables) {
             if (!disposable.isDisposed) disposable.dispose()
         }
-//        if (disposable != null && !disposable!!.isDisposed) disposable!!.dispose()
     }
 
     inner class TeamGameHistoryStatePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

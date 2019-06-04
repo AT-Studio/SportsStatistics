@@ -28,9 +28,6 @@ class MainActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({ teams ->
-                    for (team in teams) {
-                        Log.d("room", team.name)
-                    }
                     if (teams.isEmpty()) {
                         rv_activity_main.visibility = View.INVISIBLE
                         tv_activity_main_no_teams.visibility = View.VISIBLE
@@ -61,10 +58,8 @@ class MainActivity : BaseActivity() {
 
     fun getFollowedTeam(name: String): Team? {
         if (adapter != null) {
-            Log.d("room", "adapter is not null")
             return adapter!!.getTeam(name)
         }
-        Log.d("room", "adapter is null")
         return null
     }
 }

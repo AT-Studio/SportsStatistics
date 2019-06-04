@@ -22,11 +22,6 @@
 
     <color name="dividerLowAlpha">#40BDBDBD</color>
 
-    <color name="boostColor">#2196F3</color>
-
-    <color name="facebookLogo">#3b5998</color>
-    <color name="twitterLogo">#1DA1F2</color>
-
     <color name="ripple_dark">#d5d5d5</color>
     <color name="ripple_light">#e3e3e3</color>
 </resources>

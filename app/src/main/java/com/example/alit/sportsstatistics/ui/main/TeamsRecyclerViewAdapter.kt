@@ -3,7 +3,6 @@ package com.example.alit.sportsstatistics.ui.main
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +11,11 @@ import android.view.ViewGroup
 import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.ui.base.BaseActivity
 import com.example.alit.sportsstatistics.ui.team_detail.TeamDetailActivity
+import com.example.alit.sportsstatistics.utils.UIUtils.Companion.getId
 import com.example.alit.sportsstatistics.utils.db.tables.Team
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.common.ResizeOptions
+import com.facebook.imagepipeline.request.ImageRequestBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.adapter_teams_item.view.*
@@ -50,9 +53,18 @@ class TeamsRecyclerViewAdapter(var teams: ArrayList<Team>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: TeamsViewHolder, position: Int) {
         val team = teams[position]
-        holder.teamLogo.setImageDrawable(
-                ContextCompat.getDrawable(context, getId(team.abbr!!.toLowerCase(), R.drawable::class.java))
-        )
+        try {
+            val homeLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(getId(team.abbr!!.toLowerCase(), R.drawable::class.java))
+                    .setResizeOptions(ResizeOptions.forSquareSize(holder.teamLogo.width))
+                    .build()
+            holder.teamLogo.controller = Fresco.newDraweeControllerBuilder()
+                    .setOldController(holder.teamLogo.controller)
+                    .setImageRequest(homeLogoRequest)
+                    .build()
+        } catch (e: Exception) {
+            Log.d("uiutils", "Couldn't find resource")
+        }
+
         holder.teamName.setText(team.name)
         holder.teamCity.setText(team.city)
     }
@@ -69,22 +81,10 @@ class TeamsRecyclerViewAdapter(var teams: ArrayList<Team>) : RecyclerView.Adapte
     fun getTeam(name: String): Team? {
         for (team in teams) {
             if (team.name!!.toLowerCase().equals(name)) {
-                Log.d("room", "found team with name: $name")
                 return team
             }
         }
-        Log.d("room", "did not find team with name: $name")
         return null
-    }
-
-    fun getId(resourceName: String, c: Class<*>): Int {
-        try {
-            val idField = c.getDeclaredField(resourceName)
-            return idField.getInt(idField)
-        } catch (e: Exception) {
-            throw RuntimeException("No resource ID found for: "
-                    + resourceName + " / " + c, e)
-        }
     }
 
     inner class TeamsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
