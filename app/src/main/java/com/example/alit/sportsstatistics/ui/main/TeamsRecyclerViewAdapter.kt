@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.ui.base.BaseActivity
 import com.example.alit.sportsstatistics.ui.team_detail.TeamDetailActivity
-import com.example.alit.sportsstatistics.utils.UIUtils.Companion.getId
+import com.example.alit.sportsstatistics.utils.UIUtils
 import com.example.alit.sportsstatistics.utils.db.tables.Team
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.common.ResizeOptions
@@ -53,20 +53,25 @@ class TeamsRecyclerViewAdapter(var teams: ArrayList<Team>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: TeamsViewHolder, position: Int) {
         val team = teams[position]
-        try {
-            val homeLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(getId(team.abbr!!.toLowerCase(), R.drawable::class.java))
-                    .setResizeOptions(ResizeOptions.forSquareSize(holder.teamLogo.width))
-                    .build()
-            holder.teamLogo.controller = Fresco.newDraweeControllerBuilder()
-                    .setOldController(holder.teamLogo.controller)
-                    .setImageRequest(homeLogoRequest)
-                    .build()
-        } catch (e: Exception) {
-            Log.d("uiutils", "Couldn't find resource")
-        }
+        if (team.teamID == -1) {
+            holder.addWrapper.visibility = View.VISIBLE
+        } else {
+            holder.addWrapper.visibility = View.INVISIBLE
+            try {
+                val homeLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(UIUtils.getId(team.abbr!!.toLowerCase(), R.drawable::class.java))
+                        .setResizeOptions(ResizeOptions.forSquareSize(holder.teamLogo.width))
+                        .build()
+                holder.teamLogo.controller = Fresco.newDraweeControllerBuilder()
+                        .setOldController(holder.teamLogo.controller)
+                        .setImageRequest(homeLogoRequest)
+                        .build()
+            } catch (e: Exception) {
+                Log.d("uiutils", "Couldn't find resource")
+            }
 
-        holder.teamName.setText(team.name)
-        holder.teamCity.setText(team.city)
+            holder.teamName.setText(team.name)
+            holder.teamCity.setText(team.city)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -91,5 +96,7 @@ class TeamsRecyclerViewAdapter(var teams: ArrayList<Team>) : RecyclerView.Adapte
         val teamLogo = itemView.iv_adapter_teams_logo
         val teamName = itemView.tv_adapter_teams_name
         val teamCity = itemView.tv_adapter_teams_city
+
+        val addWrapper = itemView.fl_adapter_teams_add_wrapper
     }
 }

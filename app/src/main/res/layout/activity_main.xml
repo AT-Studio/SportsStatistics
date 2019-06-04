@@ -13,27 +13,28 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_activity_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp">
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tv_activity_main_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="56dp"
+                android:fontFamily="@font/coiny"
+                android:letterSpacing="0.1"
+                android:gravity="center_vertical"
+                android:text="@string/app_name_main"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/tv_activity_main_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:fontFamily="@font/coiny"
-                    android:gravity="center"
-                    android:letterSpacing="0.1"
-                    android:text="@string/app_name_main"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp" />
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
         </android.support.v7.widget.Toolbar>
 

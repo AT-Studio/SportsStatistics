@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.alit.sportsstatistics.R
-import com.example.alit.sportsstatistics.utils.UIUtils.Companion.getId
+import com.example.alit.sportsstatistics.utils.UIUtils
 import com.example.alit.sportsstatistics.utils.db.tables.TeamGame
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.common.ResizeOptions
@@ -26,36 +26,41 @@ class TeamGamesRecyclerViewAdapter(val teamGames: ArrayList<TeamGame>) : Recycle
 
     override fun onBindViewHolder(holder: TeamGamesViewHolder, position: Int) {
         val game = teamGames[position]
-        try {
-            val homeLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(getId(game.homeTeamAbbr!!.toLowerCase(), R.drawable::class.java))
-                    .setResizeOptions(ResizeOptions.forSquareSize(holder.homeLogo.width))
-                    .build()
-            holder.homeLogo.controller = Fresco.newDraweeControllerBuilder()
-                    .setOldController(holder.homeLogo.controller)
-                    .setImageRequest(homeLogoRequest)
-                    .build()
-        } catch (e: Exception) {
-            Log.d("uiutils", "Couldn't find resource")
+        if (game.id == -1) {
+            holder.addWrapper.visibility = View.VISIBLE
+        } else {
+            holder.addWrapper.visibility = View.INVISIBLE
+            try {
+                val homeLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(UIUtils.getId(game.homeTeamAbbr!!.toLowerCase(), R.drawable::class.java))
+                        .setResizeOptions(ResizeOptions.forSquareSize(holder.homeLogo.width))
+                        .build()
+                holder.homeLogo.controller = Fresco.newDraweeControllerBuilder()
+                        .setOldController(holder.homeLogo.controller)
+                        .setImageRequest(homeLogoRequest)
+                        .build()
+            } catch (e: Exception) {
+                Log.d("uiutils", "Couldn't find resource")
+            }
+            try {
+                val awayLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(UIUtils.getId(game.awayTeamAbbr!!.toLowerCase(), R.drawable::class.java))
+                        .setResizeOptions(ResizeOptions.forSquareSize(holder.awayLogo.width))
+                        .build()
+                holder.awayLogo.controller = Fresco.newDraweeControllerBuilder()
+                        .setOldController(holder.awayLogo.controller)
+                        .setImageRequest(awayLogoRequest)
+                        .build()
+            } catch (e: Exception) {
+                Log.d("uiutils", "Couldn't find resource")
+            }
+
+            holder.homeScore.setText(game.homeScore.toString())
+            holder.awayScore.setText(game.awayScore.toString())
+
+            holder.homeAbbr.setText(game.homeTeamAbbr)
+            holder.awayAbbr.setText(game.awayTeamAbbr)
+
+            holder.gameDate.setText(game.startTime)
         }
-        try {
-            val awayLogoRequest = ImageRequestBuilder.newBuilderWithResourceId(getId(game.awayTeamAbbr!!.toLowerCase(), R.drawable::class.java))
-                    .setResizeOptions(ResizeOptions.forSquareSize(holder.awayLogo.width))
-                    .build()
-            holder.awayLogo.controller = Fresco.newDraweeControllerBuilder()
-                    .setOldController(holder.awayLogo.controller)
-                    .setImageRequest(awayLogoRequest)
-                    .build()
-        } catch (e: Exception) {
-            Log.d("uiutils", "Couldn't find resource")
-        }
-
-        holder.homeScore.setText(game.homeScore.toString())
-        holder.awayScore.setText(game.awayScore.toString())
-
-        holder.homeAbbr.setText(game.homeTeamAbbr)
-        holder.awayAbbr.setText(game.awayTeamAbbr)
-
-        holder.gameDate.setText(game.startTime)
     }
 
     override fun getItemCount(): Int {
@@ -72,6 +77,8 @@ class TeamGamesRecyclerViewAdapter(val teamGames: ArrayList<TeamGame>) : Recycle
         val awayScore = itemView.tv_adapter_team_games_away_score_total
 
         val gameDate = itemView.tv_adapter_team_games_date
+
+        val addWrapper = itemView.fl_adapter_team_games_add_wrapper
     }
 
 }

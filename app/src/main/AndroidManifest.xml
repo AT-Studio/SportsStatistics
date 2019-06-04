@@ -27,6 +27,9 @@
             android:name=".ui.team_detail.TeamDetailActivity"
             android:label="@string/title_activity_team_detail"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.purchases.PurchaseActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

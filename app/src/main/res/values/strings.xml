@@ -11,6 +11,8 @@
 
     <string name="adapter_teams_follow_text">Follow</string>
 
+    <string name="add_text">THIS IS AN ADD</string>
+
     <string name="fragment_main_add_team_follow_text">Follow</string>
     <string name="fragment_main_add_team_search_text">Team name</string>
 
@@ -22,4 +24,9 @@
     <string name="activity_team_detail_ties_text">Ties</string>
     <string name="activity_team_detail_season_text">Season</string>
     <string name="activity_team_detail_follow_text">Follow</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_main_purchases">Purchases</string>
 </resources>

@@ -102,8 +102,7 @@ class TeamGameHistoryFragment : BaseFragment() {
                                             teamGameRoom.season = season
                                             teamGamesRoom.add(teamGameRoom)
                                         }
-                                        rootView.rv_fragment_team_detail_game_history.adapter =
-                                                TeamGamesRecyclerViewAdapter(teamGamesRoom)
+                                        prepareAndSetAdapter(teamGamesRoom)
                                         disposable = viewModel.insertAllTeamGamesRoom(teamGamesRoom)
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
@@ -121,7 +120,7 @@ class TeamGameHistoryFragment : BaseFragment() {
                     } else {
                         tv_fragment_team_detail_game_history_no_games.visibility = View.INVISIBLE
                         rv_fragment_team_detail_game_history.visibility = View.VISIBLE
-                        rootView.rv_fragment_team_detail_game_history.adapter = TeamGamesRecyclerViewAdapter(teamGames as ArrayList<TeamGame>)
+                        prepareAndSetAdapter(teamGames as ArrayList<TeamGame>)
                     }
                 }, {
                     Log.d("room", it.message)
@@ -153,8 +152,7 @@ class TeamGameHistoryFragment : BaseFragment() {
                             teamGameRoom.season = season
                             teamGamesRoom.add(teamGameRoom)
                         }
-                        rootView.rv_fragment_team_detail_game_history.adapter =
-                                TeamGamesRecyclerViewAdapter(teamGamesRoom)
+                        prepareAndSetAdapter(teamGamesRoom)
                         disposable = viewModel.insertAllTeamGamesRoom(teamGamesRoom)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -170,6 +168,18 @@ class TeamGameHistoryFragment : BaseFragment() {
                     rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
                     tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                 })
+    }
+
+    fun prepareAndSetAdapter(teamGames: ArrayList<TeamGame>) {
+        var index = 3
+        while (index < teamGames.size) {
+            val addGame = TeamGame()
+            addGame.id = -1
+            teamGames.add(index, addGame)
+            index += 4
+        }
+        rootView.rv_fragment_team_detail_game_history.adapter =
+                TeamGamesRecyclerViewAdapter(teamGames)
     }
 
     fun getDateFromStartTime(startTime: String): String {

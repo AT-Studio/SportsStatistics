@@ -83,7 +83,29 @@
         app:layout_constraintTop_toTopOf="@id/iv_adapter_team_games_away_logo"
         app:layout_constraintBottom_toBottomOf="@id/iv_adapter_team_games_away_logo"/>
 
+    <FrameLayout
+        android:id="@+id/fl_adapter_team_games_add_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/defaultBackgroundColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/v_adapter_team_games_item_divider">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:text="@string/add_text"/>
+
+    </FrameLayout>
+
     <View
+        android:id="@+id/v_adapter_team_games_item_divider"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="20dp"
