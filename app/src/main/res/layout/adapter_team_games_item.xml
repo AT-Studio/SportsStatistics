@@ -1,12 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/no"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_adapter_team_games_home_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/la"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_adapter_team_games_home_score_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="26"
+        android:textColor="@color/primary_text"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@id/iv_adapter_team_games_home_logo"
+        app:layout_constraintTop_toTopOf="@id/iv_adapter_team_games_home_logo"
+        app:layout_constraintBottom_toBottomOf="@id/iv_adapter_team_games_home_logo"/>
+
+    <TextView
+        android:id="@+id/tv_adapter_team_games_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:text="01/13/2019"
+        app:layout_constraintTop_toTopOf="@id/iv_adapter_team_games_home_logo"
+        app:layout_constraintBottom_toBottomOf="@id/iv_adapter_team_games_home_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--<TableLayout-->
+        <!--android:id="@+id/tl_adapter_team_games"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintBottom_toBottomOf="@id/tv_adapter_team_games_home_score_total"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/iv_adapter_team_games_away_logo"-->
+        <!--app:layout_constraintHorizontal_bias="0.5"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/iv_adapter_team_games_home_logo"-->
+        <!--app:layout_constraintTop_toTopOf="@id/iv_adapter_team_games_home_logo">-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="1" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="2"-->
+                <!--android:text="1" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="3"-->
+                <!--android:text="2" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="4"-->
+                <!--android:text="3" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="5"-->
+                <!--android:text="4" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="6"-->
+                <!--android:text="OT" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:layout_column="7"-->
+                <!--android:text="T"-->
+                <!--android:textColor="@color/primary_text" />-->
+
+        <!--</TableRow>-->
+
+        <!--<View-->
+            <!--android:id="@+id/v_adapter_team_games_table_divider"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@color/divider"-->
+            <!--android:visibility="gone" />-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_abbr"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_column="1"-->
+                <!--android:gravity="start|center_vertical"-->
+                <!--android:text="LAR" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_q1"-->
+                <!--android:layout_column="2"-->
+                <!--android:text="0" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_q2"-->
+                <!--android:layout_column="3"-->
+                <!--android:text="10" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_q3"-->
+                <!--android:layout_column="4"-->
+                <!--android:text="7" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_q4"-->
+                <!--android:layout_column="5"-->
+                <!--android:text="6" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_q5"-->
+                <!--android:layout_column="6"-->
+                <!--android:text="3" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_home_qTot"-->
+                <!--android:layout_column="7"-->
+                <!--android:text="26"-->
+                <!--android:textColor="@color/primary_text" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_abbr"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_column="1"-->
+                <!--android:gravity="start|center_vertical"-->
+                <!--android:text="NO" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_q1"-->
+                <!--android:layout_column="2"-->
+                <!--android:text="13" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_q2"-->
+                <!--android:layout_column="3"-->
+                <!--android:text="0" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_q3"-->
+                <!--android:layout_column="4"-->
+                <!--android:text="7" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_q4"-->
+                <!--android:layout_column="5"-->
+                <!--android:text="3" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_q5"-->
+                <!--android:layout_column="6"-->
+                <!--android:text="0" />-->
+
+            <!--<TextView-->
+                <!--style="@style/TeamGamesTableEntryStyle"-->
+                <!--android:id="@+id/tv_adapter_team_games_away_qTot"-->
+                <!--android:layout_column="7"-->
+                <!--android:text="23"-->
+                <!--android:textColor="@color/primary_text" />-->
+
+        <!--</TableRow>-->
+
+    <!--</TableLayout>-->
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_adapter_team_games_away_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/no"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_adapter_team_games_away_score_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="23"
+        android:textColor="@color/primary_text"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toStartOf="@id/iv_adapter_team_games_away_logo"
+        app:layout_constraintTop_toTopOf="@id/iv_adapter_team_games_away_logo"
+        app:layout_constraintBottom_toBottomOf="@id/iv_adapter_team_games_away_logo"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_adapter_team_games_home_logo" />
 
 </android.support.constraint.ConstraintLayout>

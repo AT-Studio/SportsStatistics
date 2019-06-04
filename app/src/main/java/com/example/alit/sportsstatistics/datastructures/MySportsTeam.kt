@@ -14,7 +14,6 @@ open class MySportsTeam {
     }
 
     inner class Stats {
-
         val gamesPlayed: Int? = null
         val standings: Standings? = null
 

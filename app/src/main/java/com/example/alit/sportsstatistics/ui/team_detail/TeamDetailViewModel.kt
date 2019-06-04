@@ -2,8 +2,10 @@ package com.example.alit.sportsstatistics.ui.team_detail
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import com.example.alit.sportsstatistics.datastructures.TeamGamesResponse
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.utils.SportsStatisticsRepository
+import com.example.alit.sportsstatistics.utils.db.tables.TeamGame
 import com.example.alit.sportsstatistics.utils.db.tables.TeamStandings
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -27,6 +29,18 @@ class TeamDetailViewModel : AndroidViewModel {
 
     fun getTeamStandingRoom(teamAbbr: String, season: String): Maybe<TeamStandings> {
         return sportsStatisticsRepository.getTeamStandingRoom(teamAbbr, season)
+    }
+
+    fun getTeamGames(season: String, team: String): Observable<TeamGamesResponse> {
+        return sportsStatisticsRepository.getTeamGames(season, team)
+    }
+
+    fun getTeamGamesRoom(teamAbbr: String, season: String): Maybe<List<TeamGame>> {
+        return sportsStatisticsRepository.getTeamGamesRoom(teamAbbr, season)
+    }
+
+    fun insertAllTeamGamesRoom(teamGames: List<TeamGame>): Completable {
+        return sportsStatisticsRepository.insertAllTeamGamesRoom(teamGames)
     }
 
 }

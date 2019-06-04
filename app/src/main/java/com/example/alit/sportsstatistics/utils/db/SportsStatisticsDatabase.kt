@@ -4,12 +4,9 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.example.alit.sportsstatistics.utils.db.tables.Team
-import com.example.alit.sportsstatistics.utils.db.tables.TeamDao
-import com.example.alit.sportsstatistics.utils.db.tables.TeamStandings
-import com.example.alit.sportsstatistics.utils.db.tables.TeamStandingsDao
+import com.example.alit.sportsstatistics.utils.db.tables.*
 
-@Database(entities = arrayOf(Team::class, TeamStandings::class), version = 1)
+@Database(entities = arrayOf(Team::class, TeamStandings::class, TeamGame::class), version = 1)
 abstract class SportsStatisticsDatabase : RoomDatabase() {
 
     companion object {
@@ -33,5 +30,7 @@ abstract class SportsStatisticsDatabase : RoomDatabase() {
     abstract fun teamDao(): TeamDao
 
     abstract fun teamStandingsDao(): TeamStandingsDao
+
+    abstract fun teamGamesDao(): TeamGameDao
 
 }

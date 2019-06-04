@@ -2,9 +2,11 @@ package com.example.alit.sportsstatistics.utils
 
 import android.content.Context
 import com.example.alit.sportsstatistics.R
+import com.example.alit.sportsstatistics.datastructures.TeamGamesResponse
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.utils.db.SportsStatisticsDatabase
 import com.example.alit.sportsstatistics.utils.db.tables.Team
+import com.example.alit.sportsstatistics.utils.db.tables.TeamGame
 import com.example.alit.sportsstatistics.utils.db.tables.TeamStandings
 import com.example.alit.sportsstatistics.utils.network.SportsStatisticsService
 import io.reactivex.Completable
@@ -65,6 +67,18 @@ class SportsStatisticsRepository {
         return sportsStatsAPI.getTeamStandings(getApiAuth(), season, team)
     }
 
+    fun getTeamGames(season: String, team: String): Observable<TeamGamesResponse> {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+
+        val sportsGamesAPI = retrofit.create(SportsStatisticsService::class.java)
+
+        return sportsGamesAPI.getTeamGames(getApiAuth(), season, team)
+    }
+
     fun getApiAuth(): String {
         return Credentials.basic(context.resources.getString(R.string.my_sports_feed_API_key), "MYSPORTSFEEDS")
 //        val auth = "9bb37a05-a9fa-4489-ad71-32c526:MYSPORTSFEEDS"
@@ -95,5 +109,15 @@ class SportsStatisticsRepository {
 
     fun getTeamStandingRoom(teamAbbr: String, season: String): Maybe<TeamStandings> {
         return sportsStatisticsDatabase.teamStandingsDao().getTeamStanding(teamAbbr, season)
+    }
+
+    fun getTeamGamesRoom(teamAbbr: String, season: String): Maybe<List<TeamGame>> {
+        return sportsStatisticsDatabase.teamGamesDao().getTeamGames(teamAbbr, season)
+    }
+
+    fun insertAllTeamGamesRoom(teamGames: List<TeamGame>): Completable {
+        return Completable.fromCallable {
+            sportsStatisticsDatabase.teamGamesDao().insertAll(*teamGames.toTypedArray())
+        }
     }
 }

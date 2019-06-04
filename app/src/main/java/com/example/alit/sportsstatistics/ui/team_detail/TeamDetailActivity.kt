@@ -2,6 +2,8 @@ package com.example.alit.sportsstatistics.ui.team_detail
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
@@ -72,7 +74,7 @@ class TeamDetailActivity : BaseActivity() {
 
         appbar_activity_team_detail.post {
             val appbarParams = appbar_activity_team_detail.layoutParams as CoordinatorLayout.LayoutParams
-            appbarParams.height = cl_activity_main_dashboard.height + getPixels(56) + getStatusBarHeight()
+            appbarParams.height = cl_activity_team_detail_dashboard.height + getPixels(56) + getStatusBarHeight()
             appbar_activity_team_detail.layoutParams = appbarParams
 
             teamNameY = tv_activity_team_detail_name.y.toInt() + tv_activity_team_detail_name.height
@@ -80,10 +82,14 @@ class TeamDetailActivity : BaseActivity() {
 
         //TODO: first check if season is stored locally?
 
-        cl_activity_main_dashboard.post {
-            val dashParams = cl_activity_main_dashboard.layoutParams as CollapsingToolbarLayout.LayoutParams
+        cl_activity_team_detail_dashboard.post {
+            val dashParams = cl_activity_team_detail_dashboard.layoutParams as CollapsingToolbarLayout.LayoutParams
             dashParams.topMargin = getPixels(56) + getStatusBarHeight()
-            cl_activity_main_dashboard.layoutParams = dashParams
+            cl_activity_team_detail_dashboard.layoutParams = dashParams
+
+            val rankParams = tv_activity_team_detail_rank.layoutParams as ConstraintLayout.LayoutParams
+            rankParams.width = tv_activity_team_detail_rank_widther.width
+            tv_activity_team_detail_rank.layoutParams = rankParams
         }
 
         appbar_activity_team_detail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -108,31 +114,34 @@ class TeamDetailActivity : BaseActivity() {
             }
         }
 
-        vp_activity_team_detail.adapter = TeamGameHistoryStatePagerAdapter(supportFragmentManager)
-        vp_activity_team_detail.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+        val handler = Handler()
+        handler.postDelayed({
+            vp_activity_team_detail.adapter = TeamGameHistoryStatePagerAdapter(supportFragmentManager)
+            vp_activity_team_detail.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
 
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                Log.d("pager", "page selected: $position")
-                tv_activity_team_detail_season.setText((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).getPageTitle(position))
-                getTeamStandingsForSeason((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).seasons[position])
-                if (position == 0) {
-                    iv_activity_team_detail_arrow_left.visibility = View.INVISIBLE
-                } else {
-                    iv_activity_team_detail_arrow_left.visibility = View.VISIBLE
+                override fun onPageScrollStateChanged(state: Int) {
                 }
-                if (position == (vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).count - 1) {
-                    iv_activity_team_detail_arrow_right.visibility = View.INVISIBLE
-                } else {
-                    iv_activity_team_detail_arrow_right.visibility = View.VISIBLE
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 }
-            }
-        })
+
+                override fun onPageSelected(position: Int) {
+                    Log.d("pager", "page selected: $position")
+                    tv_activity_team_detail_season.setText((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).getPageTitle(position))
+                    getTeamStandingsForSeason((vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).seasons[position])
+                    if (position == 0) {
+                        iv_activity_team_detail_arrow_left.visibility = View.INVISIBLE
+                    } else {
+                        iv_activity_team_detail_arrow_left.visibility = View.VISIBLE
+                    }
+                    if (position == (vp_activity_team_detail.adapter as TeamGameHistoryStatePagerAdapter).count - 1) {
+                        iv_activity_team_detail_arrow_right.visibility = View.INVISIBLE
+                    } else {
+                        iv_activity_team_detail_arrow_right.visibility = View.VISIBLE
+                    }
+                }
+            })
+        }, 200)
 
 //        tb_activity_team_detail.setOnTouchListener(null)
 //        tb_activity_team_detail.setOnClickListener(null)
@@ -186,7 +195,7 @@ class TeamDetailActivity : BaseActivity() {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe ({ teamStanding ->
                                 Log.d("room", "onComplete teamstanding: " + season)
-                                if (teamStanding.teams == null || teamStanding.teams.isEmpty()) {
+                                if (teamStanding.teams.isNullOrEmpty()) {
                                     Log.d("room", "onComplete teamstanding is null")
                                     tv_activity_team_detail_name.setText(teamName)
                                     tv_activity_team_detail_title.setText(teamName)
@@ -277,7 +286,7 @@ class TeamDetailActivity : BaseActivity() {
                 SportsStatisticsRepository.SEASON_2015_PLAYOFFS)
 
         override fun getItem(position: Int): Fragment {
-            return TeamGameHistoryFragment.create(seasons[position])
+            return TeamGameHistoryFragment.create(teamAbbr, seasons[position])
         }
 
         override fun getPageTitle(position: Int): CharSequence? {

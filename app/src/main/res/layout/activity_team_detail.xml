@@ -35,10 +35,23 @@
             </android.support.v7.widget.Toolbar>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/cl_activity_main_dashboard"
+                android:id="@+id/cl_activity_team_detail_dashboard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/defaultBackgroundColor">
+
+                <TextView
+                    android:id="@+id/tv_activity_team_detail_rank_widther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="UA"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="1" />
 
                 <ImageView
                     android:id="@+id/iv_activity_team_detail_logo"
