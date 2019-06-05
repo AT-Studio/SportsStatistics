@@ -318,6 +318,7 @@ class AddTeamDialogFragment : BaseDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        rootView.et_fragment_main_add_team_search_text.addTextChangedListener(null);
         if (disposable != null && !disposable!!.isDisposed) disposable!!.dispose()
     }
 }

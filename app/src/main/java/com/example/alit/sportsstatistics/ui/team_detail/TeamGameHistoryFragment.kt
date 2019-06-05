@@ -79,10 +79,12 @@ class TeamGameHistoryFragment : BaseFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({ teamGames ->
                     if (teamGames.isEmpty()) {
+                        pb_fragment_team_detail_game_history.visibility = View.VISIBLE
                         disposable = viewModel.getTeamGames(season, teamAbbr)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe ({ teamGamesResponse ->
+                                    pb_fragment_team_detail_game_history.visibility = View.INVISIBLE
                                     if (teamGamesResponse.games.isNullOrEmpty()) {
                                         rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
                                         tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
@@ -114,6 +116,7 @@ class TeamGameHistoryFragment : BaseFragment() {
                                 }, {
                                     Log.d("mySports", it.message)
                                     showToast("Please check internet connection")
+                                    pb_fragment_team_detail_game_history.visibility = View.INVISIBLE
                                     rv_fragment_team_detail_game_history.visibility = View.INVISIBLE
                                     tv_fragment_team_detail_game_history_no_games.visibility = View.VISIBLE
                                 })

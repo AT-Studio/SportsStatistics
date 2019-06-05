@@ -16,6 +16,16 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_fragment_team_detail_game_history"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:indeterminateTint="@color/tertiary_text"
+        android:indeterminate="true" />
+
     <TextView
         android:id="@+id/tv_fragment_team_detail_game_history_no_games"
         android:layout_width="200dp"

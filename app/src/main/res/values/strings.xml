@@ -4,14 +4,13 @@
 
     <string name="app_name_main">NFL Sports Statistics</string>
 
-    <string name="my_sports_feed_API_key">9bb37a05-a9fa-4489-ad71-32c526</string>
     <string name="title_activity_team_detail">TeamDetailActivity</string>
 
     <string name="activity_main_not_following_teams_text">You are not following any teams, yet.</string>
 
     <string name="adapter_teams_follow_text">Follow</string>
 
-    <string name="add_text">THIS IS AN ADD</string>
+    <string name="add_text">THIS IS AN AD</string>
 
     <string name="fragment_main_add_team_follow_text">Follow</string>
     <string name="fragment_main_add_team_search_text">Team name</string>
@@ -29,4 +28,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="nav_main_purchases">Purchases</string>
+
+    <string name="activity_main_title">Purchases</string>
+    <string name="activity_purchase_paid_version_text">Paid version (no ads)</string>
+    <string name="activity_purchase_paid_price">$0.99</string>
 </resources>

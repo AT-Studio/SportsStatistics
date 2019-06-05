@@ -29,17 +29,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.navigation_main)
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout_activity_main,
-                tb_activity_main, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-//        toggle.setDrawerIndicatorEnabled(false)
-        toggle.setToolbarNavigationClickListener{
-            drawer_layout_activity_main.openDrawer(GravityCompat.START)
-        }
-
-        drawer_layout_activity_main.addDrawerListener(toggle)
-        toggle.syncState()
-
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         val layoutManager = LinearLayoutManager(this)
@@ -64,6 +53,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fab_activity_main.setOnClickListener {
             AddTeamDialogFragment.create().show(supportFragmentManager, AddTeamDialogFragment.ADD_TEAM_FRAGMENT_TAG)
         }
+
+        val toggle = ActionBarDrawerToggle(
+                this, drawer_layout_activity_main,
+                tb_activity_main, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        toggle.setToolbarNavigationClickListener{
+            drawer_layout_activity_main.openDrawer(GravityCompat.START)
+        }
+
+        drawer_layout_activity_main.addDrawerListener(toggle)
+        toggle.syncState()
 
         nav_view_activity_main.setNavigationItemSelectedListener(this)
     }

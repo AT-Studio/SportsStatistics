@@ -1,7 +1,6 @@
 package com.example.alit.sportsstatistics.utils
 
 import android.content.Context
-import com.example.alit.sportsstatistics.R
 import com.example.alit.sportsstatistics.datastructures.TeamGamesResponse
 import com.example.alit.sportsstatistics.datastructures.TeamStandingResponse
 import com.example.alit.sportsstatistics.utils.db.SportsStatisticsDatabase
@@ -23,6 +22,7 @@ class SportsStatisticsRepository {
 
     companion object {
 
+        const val MY_SPORTS_API_KEY = "9bb37a05-a9fa-4489-ad71-32c526";
         const val BASE_URL = "https://api.mysportsfeeds.com/v2.1/pull/nfl/"
         const val SEASON_LATEST = "Latest"
         const val SEASON_2018_REGULAR = "2018-Regular"
@@ -42,7 +42,6 @@ class SportsStatisticsRepository {
                 synchronized(SportsStatisticsRepository::class) {
                     if (INSTANCE == null) {
                         INSTANCE = SportsStatisticsRepository()
-                        INSTANCE!!.context = context.applicationContext
                         INSTANCE!!.sportsStatisticsDatabase = SportsStatisticsDatabase.get(context)
                     }
                 }
@@ -52,7 +51,6 @@ class SportsStatisticsRepository {
 
     }
 
-    lateinit var context: Context
     lateinit var sportsStatisticsDatabase: SportsStatisticsDatabase
 
     fun getTeamStats(season: String, team: String): Observable<TeamStandingResponse> {
@@ -80,9 +78,7 @@ class SportsStatisticsRepository {
     }
 
     fun getApiAuth(): String {
-        return Credentials.basic(context.resources.getString(R.string.my_sports_feed_API_key), "MYSPORTSFEEDS")
-//        val auth = "9bb37a05-a9fa-4489-ad71-32c526:MYSPORTSFEEDS"
-//        return "Basic " + auth
+        return Credentials.basic(MY_SPORTS_API_KEY, "MYSPORTSFEEDS")
     }
 
     fun insertTeamRoom(team: Team): Completable {
